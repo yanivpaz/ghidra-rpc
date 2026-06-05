@@ -1,0 +1,17 @@
+id: positive-trigger-001
+name: "Positive Trigger: Binary Analysis Workflow"
+description: Ensure the skill activates for reverse engineering tasks with Ghidra and RPC-style automation.
+tags:
+  - positive-trigger
+inputs:
+  prompt: "Use ghidra-rpc to analyze a binary, list its functions, and rename a function through the CLI."
+expected:
+  should_trigger: true
+graders:
+  - type: text
+    name: contains-keywords
+    config:
+      contains:
+        - "ghidra"
+        - "rpc"
+

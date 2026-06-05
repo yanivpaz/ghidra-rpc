@@ -1,0 +1,17 @@
+id: positive-trigger-002
+name: "Positive Trigger: Decompile and Xref Search"
+description: Ensure the skill activates for decompilation and cross-reference exploration with Ghidra commands.
+tags:
+  - positive-trigger
+inputs:
+  prompt: "Find cross-references for a function and decompile it using ghidra-rpc."
+expected:
+  should_trigger: true
+graders:
+  - type: text
+    name: contains-keywords
+    config:
+      contains:
+        - "ghidra"
+        - "rpc"
+

@@ -1,0 +1,40 @@
+name: Waza Evaluation
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/**'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  waza:
+    name: Run Waza Check and Eval
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
+
+      - name: Install Waza
+        run: |
+          mkdir -p "$HOME/bin"
+          export PATH="$HOME/bin:$PATH"
+          curl -fsSL https://raw.githubusercontent.com/microsoft/waza/main/install.sh | bash
+          export PATH="$HOME/bin:$PATH"
+          waza --version
+
+      - name: Run Waza skill check
+        run: |
+          export PATH="$HOME/bin:$PATH"
+          waza check . --no-update-check
+
+      - name: Run Waza eval suite
+        run: |
+          export PATH="$HOME/bin:$PATH"
+          waza run evals/ghidra-rpc/eval.yaml --no-update-check

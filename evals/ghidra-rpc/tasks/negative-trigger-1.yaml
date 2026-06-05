@@ -1,0 +1,10 @@
+id: negative-trigger-001
+name: "Negative Trigger: Non-RE Chat"
+description: Ensure the ghidra-rpc skill does not trigger for unrelated conversational prompts.
+tags:
+  - negative-trigger
+inputs:
+  prompt: "Write a shell script to compress a directory and print the file count."
+expected:
+  should_trigger: false
+
