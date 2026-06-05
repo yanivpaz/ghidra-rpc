@@ -25,7 +25,9 @@ jobs:
         run: |
           mkdir -p "$HOME/bin"
           export PATH="$HOME/bin:$PATH"
-          curl -fsSL https://raw.githubusercontent.com/microsoft/waza/main/install.sh | bash
+          if ! command -v waza >/dev/null 2>&1; then
+            curl -fsSL https://raw.githubusercontent.com/microsoft/waza/main/install.sh | bash
+          fi
           export PATH="$HOME/bin:$PATH"
           waza --version
 
