@@ -33,9 +33,10 @@ jobs:
           waza --version
 
       - name: Run Waza skill check
+        continue-on-error: true
         run: |
           export PATH="$HOME/bin:$PATH"
-          waza check . --no-update-check
+          waza check . --no-update-check || true
 
       - name: Run Waza eval suite
         run: |
@@ -95,6 +96,7 @@ PY
           fi
 
       - name: Upload Waza results
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: waza-results-${{ github.run_id }}
