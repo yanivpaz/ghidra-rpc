@@ -52,6 +52,48 @@ jobs:
             echo "results.json not found"
           fi
 
+      - name: Write native GitHub workflow summary
+        if: always()
+        run: |
+          if [ -f results.json ]; then
+            python - <<'PY' > "$GITHUB_STEP_SUMMARY"
+import json
+from pathlib import Path
+
+with open('results.json') as f:
+    results = json.load(f)
+
+tasks = results.get('tasks', [])
+summary = results.get('summary', {})
+
+print('# Waza Eval Summary')
+print('')
+print('**Status:**', summary.get('status', 'unknown'))
+print('')
+print('| Metric | Value |')
+print('|---|---|')
+print(f"| Success rate | {summary.get('success_rate', 'N/A')} |")
+print(f"| Aggregate score | {summary.get('aggregate_score', 'N/A')} |")
+print(f"| Total tests | {summary.get('total', len(tasks))} |")
+print(f"| Passed | {summary.get('passed', 'N/A')} |")
+print(f"| Failed | {summary.get('failed', 'N/A')} |")
+print('')
+if tasks:
+    print('## Task Results')
+    print('')
+    print('| Task | Result | Score | Duration |')
+    print('|---|---|---|---|')
+    for task in tasks:
+        name = task.get('name') or task.get('id', 'unknown')
+        result = 'passed' if task.get('pass_rate', 0) >= 1 else 'failed'
+        score = task.get('avg', 'N/A')
+        duration = task.get('duration_ms', 'N/A')
+        print(f"| {name} | {result} | {score} | {duration}ms |")
+PY
+          else
+            echo 'results.json not found' >> "$GITHUB_STEP_SUMMARY"
+          fi
+
       - name: Upload Waza results
         uses: actions/upload-artifact@v4
         with:
