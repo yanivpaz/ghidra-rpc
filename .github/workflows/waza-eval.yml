@@ -8,6 +8,7 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   waza:
@@ -39,4 +40,12 @@ jobs:
       - name: Run Waza eval suite
         run: |
           export PATH="$HOME/bin:$PATH"
-          waza run evals/ghidra-rpc/eval.yaml --no-update-check
+          waza run evals/ghidra-rpc/eval.yaml --output results.json --reporter junit:results.xml --no-update-check
+
+      - name: Upload Waza results
+        uses: actions/upload-artifact@v4
+        with:
+          name: waza-results-${{ github.run_id }}
+          path: |
+            results.json
+            results.xml

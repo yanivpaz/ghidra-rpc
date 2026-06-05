@@ -80,6 +80,31 @@ project in the Ghidra GUI.
 - [Vulnerability Research](docs/flows/vulnerability-research.md)
 - [Patch Analysis](docs/flows/patch-analysis.md)
 
+## Waza Evaluation
+
+This repository includes a Waza evaluation suite for the `ghidra-rpc` skill.
+The evaluation workflow is designed to validate the skill prompt, enforce token
+budgets, and run skill trigger tests automatically.
+
+Related files:
+
+- `.waza.yaml` — workspace Waza configuration and explicit skill token budget
+- `.github/workflows/waza-eval.yml` — GitHub Actions workflow that installs
+  Waza, runs `waza check`, and executes the eval suite
+- `evals/ghidra-rpc/eval.yaml` — Waza evaluation spec for the skill
+- `evals/ghidra-rpc/tasks/*.yaml` — trigger tasks that exercise positive and
+  negative behavior
+
+To run the Waza checks locally:
+
+```bash
+waza check .
+waza run evals/ghidra-rpc/eval.yaml --no-update-check
+```
+
+The workflow also uploads `results.json` and `results.xml` as build artifacts,
+so you can inspect the evaluation output from the GitHub Actions run.
+
 ## License
 
 MIT
