@@ -47,7 +47,7 @@ jobs:
           export PATH="$HOME/bin:$PATH"
           echo "=== Waza results.json ==="
           if [ -f results.json ]; then
-            python -m json.tool results.json
+            python3 -m json.tool results.json
           else
             echo "results.json not found"
           fi
@@ -56,7 +56,7 @@ jobs:
         if: always()
         run: |
           if [ -f results.json ]; then
-            python - <<'PY' > "$GITHUB_STEP_SUMMARY"
+            python3 - <<'PY' > "$GITHUB_STEP_SUMMARY"
 import json
 from pathlib import Path
 
