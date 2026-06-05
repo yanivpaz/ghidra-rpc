@@ -42,6 +42,16 @@ jobs:
           export PATH="$HOME/bin:$PATH"
           waza run evals/ghidra-rpc/eval.yaml --output results.json --reporter junit:results.xml --no-update-check
 
+      - name: Print Waza test result summary
+        run: |
+          export PATH="$HOME/bin:$PATH"
+          echo "=== Waza results.json ==="
+          if [ -f results.json ]; then
+            python -m json.tool results.json
+          else
+            echo "results.json not found"
+          fi
+
       - name: Upload Waza results
         uses: actions/upload-artifact@v4
         with:
